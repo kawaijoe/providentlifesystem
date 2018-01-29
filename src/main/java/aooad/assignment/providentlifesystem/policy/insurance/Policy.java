@@ -1,20 +1,27 @@
 package aooad.assignment.providentlifesystem.policy.insurance;
 
-import aooad.assignment.providentlifesystem.policy.Payout;
+import aooad.assignment.providentlifesystem.policy.premium.PremiumType;
+import aooad.assignment.providentlifesystem.policy.premium.Premium;
+import aooad.assignment.providentlifesystem.policy.decorator.Rider;
 import aooad.assignment.providentlifesystem.policy.state.Active;
 import aooad.assignment.providentlifesystem.policy.state.State;
 
-import java.util.List;
+import java.util.Date;
 
-public abstract class Policy {
 
-    public static int lastPolicyNumber = 0;
+public abstract class Policy implements Rider {
+
+    public static int lastPolicyNumber = 1;
     private int policyNumber;
     private String termsCondition;
+    private Premium premium;
     private State state = new Active();
-    private List<Payout> payoutList;
 
-    // Premium
+    public Policy(String termsCondition, Date lastPaid, PremiumType premiumType) {
+        this.policyNumber = lastPolicyNumber++;
+        this.termsCondition = termsCondition;
+        this.premium = new Premium(lastPaid, premiumType, this);
+    }
 
     public static int getLastPolicyNumber() {
         return lastPolicyNumber;
@@ -28,16 +35,8 @@ public abstract class Policy {
         return policyNumber;
     }
 
-    public void setPolicyNumber(int policyNumber) {
-        this.policyNumber = policyNumber;
-    }
-
     public String getTermsCondition() {
         return termsCondition;
-    }
-
-    public void setTermsCondition(String termsCondition) {
-        this.termsCondition = termsCondition;
     }
 
     public State getState() {
@@ -48,4 +47,7 @@ public abstract class Policy {
         this.state = state;
     }
 
+    public Premium getPremium() {
+        return premium;
+    }
 }

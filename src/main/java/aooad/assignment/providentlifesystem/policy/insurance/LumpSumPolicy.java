@@ -4,18 +4,16 @@ import aooad.assignment.providentlifesystem.policy.decorator.Rider;
 
 import java.util.List;
 
-public class TravelPolicy extends Policy {
-
+public class LumpSumPolicy extends Policy {
     public double calculateCost() {
-        return 25.0;
+        return 100;
     }
 
     public double calculatePayout() {
-        return 0;
+        return 1000;
     }
 
     public List<Rider> getPolicies() {
         return null;
     }
-
 }

@@ -14,6 +14,10 @@ public class PolicyDecorator implements Rider {
         return rider.calculateCost();
     }
 
+    public double calculatePayout() {
+        return rider.calculatePayout();
+    }
+
     public List<Rider> getPolicies() {
         return rider.getPolicies();
     }

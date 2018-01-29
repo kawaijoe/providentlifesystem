@@ -1,11 +1,15 @@
 package aooad.assignment.providentlifesystem.system;
 
 public class CreditCardFacade {
-    private static CreditCardFacade ourInstance = new CreditCardFacade();
 
-    public static CreditCardFacade getInstance() {
-        return ourInstance;
+    public static void makePayment(double amount) {
+        // Some low level complex implementation
+        System.out.print("Payment by Credit Card have been made!");
     }
 
-    private CreditCardFacade() { }
+    public static void retrievePayment(double amount) {
+        // Some low level complex implementation
+        System.out.print("Retrieved payment by Credit Card have been made!");
+    }
+
 }

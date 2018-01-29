@@ -5,6 +5,7 @@ import java.util.List;
 public interface Rider {
 
     double calculateCost();
+    double calculatePayout();
     List<Rider> getPolicies();
     
 }
