@@ -1,34 +1,19 @@
 package aooad.assignment.providentlifesystem.policy.state;
 
-import aooad.assignment.providentlifesystem.policy.decorator.Rider;
-import aooad.assignment.providentlifesystem.policy.insurance.Policy;
+import aooad.assignment.providentlifesystem.policy.Policy;
 
 public abstract class State {
 
-    private String information = "";
+    protected Policy policy;
 
-    public State() { }
-
-    public State(String information) {
-        this.information = information;
+    State(Policy policy) {
+        this.policy = policy;
     }
 
-    public abstract void makePayment(Policy policy);
+    public abstract void makePayment();
 
-    public abstract void payout(Rider policy);
+    public abstract void getPayout();
 
-    public abstract void payout(Rider rider, int severity);
-
-    public void cancelledByAgent(Policy policy) {
-        policy.setState(Terminated.AGENT);
-    }
-
-    public void cancelledByClient(Policy policy) {
-        policy.setState(Terminated.CLIENT);
-    }
-
-    public String getInformation() {
-        return information;
-    }
+    public abstract void getPayout(int severity);
 
 }

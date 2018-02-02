@@ -1,31 +1,34 @@
 package aooad.assignment.providentlifesystem.policy.state;
 
+import aooad.assignment.providentlifesystem.policy.Policy;
 import aooad.assignment.providentlifesystem.policy.decorator.Rider;
-import aooad.assignment.providentlifesystem.policy.insurance.Policy;
+import aooad.assignment.providentlifesystem.policy.decorator.BasePolicy;
 
 public class Terminated extends State {
 
-    public static final State AGENT = new Terminated("Policy terminated by Agent.");
-    public static final State CLIENT = new Terminated("Policy terminated by Client.");
-    public static final State PAID_OUT = new Terminated("Policy terminated. Paid out.");
+    private String errorMessage = "State have been terminated!";
 
-    public Terminated() {
-        super();
+    public Terminated(Policy policy) {
+        super(policy);
     }
 
-    public Terminated(String information) {
-        super(information);
+    public Terminated(Policy policy, String errorMessage) {
+        super(policy);
+        this.errorMessage = errorMessage;
     }
 
-    public void makePayment(Policy policy) {
-        System.out.println(getInformation());
+    @Override
+    public void makePayment() {
+        System.out.println(errorMessage);
     }
 
-    public void payout(Rider policy) {
-        System.out.println(getInformation());
+    @Override
+    public void getPayout() {
+        System.out.println(errorMessage);
     }
 
-    public void payout(Rider rider, int severity) {
-        System.out.println(getInformation());
+    @Override
+    public void getPayout(int severity) {
+        System.out.println(errorMessage);
     }
 }

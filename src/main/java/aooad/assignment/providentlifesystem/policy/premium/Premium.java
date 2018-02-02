@@ -1,68 +1,60 @@
 package aooad.assignment.providentlifesystem.policy.premium;
 
-import aooad.assignment.providentlifesystem.policy.insurance.Policy;
+import aooad.assignment.providentlifesystem.policy.Policy;
 import aooad.assignment.providentlifesystem.policy.state.Active;
 import aooad.assignment.providentlifesystem.policy.state.Lapsed;
-import aooad.assignment.providentlifesystem.policy.state.State;
 import aooad.assignment.providentlifesystem.policy.state.Terminated;
 import aooad.assignment.providentlifesystem.system.CreditCardFacade;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class Premium {
 
-    private Date lastPaid;
+    private Calendar lastPaid;
     private PremiumType premiumType;
-    private State state;
     private Policy policy;
 
-    public Premium(Date lastPaid, PremiumType premiumType, Policy policy) {
-        this.lastPaid = lastPaid;
+    public Premium(PremiumType premiumType, Policy policy) {
+        this.lastPaid = Calendar.getInstance();
         this.premiumType = premiumType;
-        this.state = policy.getState();
         this.policy = policy;
     }
 
-    public void checkUnpaid() {
+    public void setLapsed() {
+        if(policy.getState() instanceof Terminated) return;
+
         boolean unpaid = false;
         switch(premiumType) {
             case MONTHLY:
-                // TODO: Check if expired
-                unpaid = true;
+                if(dateDifferent() > 30) unpaid = true;
                 break;
             case YEARLY:
-                // TODO: Check if expired
-                unpaid = true;
+                if(dateDifferent() > 365) unpaid = true;
                 break;
         }
-        if(unpaid) state = new Lapsed();
-        else if (!(state instanceof Terminated)) state = new Active();
+
+        if(unpaid) policy.setState(new Lapsed(policy));
+        else policy.setState(new Active(policy));
     }
 
-    public void makePayment() {
-        if (premiumType != PremiumType.ONETIME && !(state instanceof Terminated)) {
-            addTimeToLastPaid();
-            checkUnpaid();
-            CreditCardFacade.retrievePayment(policy.calculateCost());
-        }
+    public void creditCardPayment() {
+        if(policy.getState() instanceof Terminated || premiumType != PremiumType.ONETIME) return;
+
+        CreditCardFacade.retrievePayment(policy.calculateCost());
+        policy.setState(new Active(policy));
+        lastPaid = Calendar.getInstance();
     }
 
-    public void paidByCheck() {
-        if(premiumType != PremiumType.ONETIME) {
-            addTimeToLastPaid();
-            checkUnpaid();
-        }
+    public void chequePayment() {
+        if(policy.getState() instanceof Terminated || premiumType != PremiumType.ONETIME) return;
+
+        policy.setState(new Active(policy));
+        lastPaid = Calendar.getInstance();
     }
 
-    private void addTimeToLastPaid() {
-        switch (premiumType) {
-            case MONTHLY:
-                // TODO: Add 1 month of lastPaid
-                break;
-            case YEARLY:
-                // TODO: Add 1 Year to lastPaid
-                break;
-        }
+    private int dateDifferent() {
+        long diff = Calendar.getInstance().getTimeInMillis() - lastPaid.getTimeInMillis();
+        return (int) diff / (24 * 60 * 60 * 1000);
     }
 
 }

@@ -1,6 +1,7 @@
 package aooad.assignment.providentlifesystem.policy;
 
 import aooad.assignment.providentlifesystem.policy.decorator.Rider;
+import aooad.assignment.providentlifesystem.policy.state.Terminated;
 import aooad.assignment.providentlifesystem.system.CreditCardFacade;
 
 import java.util.HashMap;
@@ -15,25 +16,26 @@ public class Payout {
         put(3, 100.0);
     }};
 
-    private Rider rider;
-    private String reason;
-    private int severity = 0;
+    private Policy policy;
+    private int severity;
 
-    public Payout(Rider rider) {
-        this.rider = rider;
+    public Payout(Policy policy) {
+        this.policy = policy;
+        this.severity = 0;
     }
 
-    public Payout(Rider rider, int severity) {
-        this.rider = rider;
+    public Payout(Policy policy, int severity) {
+        this.policy = policy;
         this.severity = severity;
     }
 
     public double getPayoutAmount() {
-        return rider.calculatePayout() + severityMap.get(severity);
+        return policy.calculatePayout() + severityMap.get(severity);
     }
 
     public void completePayout() {
         CreditCardFacade.makePayment(getPayoutAmount());
+        if(severity == 0) policy.setState(new Terminated(policy));
     }
 
 }

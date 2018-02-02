@@ -1,28 +1,25 @@
 package aooad.assignment.providentlifesystem.policy.state;
 
 import aooad.assignment.providentlifesystem.policy.Payout;
-import aooad.assignment.providentlifesystem.policy.decorator.Rider;
-import aooad.assignment.providentlifesystem.policy.insurance.Policy;
+import aooad.assignment.providentlifesystem.policy.Policy;
 
 public class Active extends State {
 
-    public Active() {
-        super();
+    public Active(Policy policy) {
+        super(policy);
     }
 
-    public Active(String information) {
-        super(information);
+    public void makePayment() {
+        policy.getPremium().creditCardPayment();
     }
 
-    public void makePayment(Policy policy) {
-        policy.getPremium().makePayment();
+    public void getPayout() {
+        Payout payout = new Payout(policy);
+        payout.completePayout();
     }
 
-    public void payout(Rider rider) {
-        Payout payout = new Payout(rider, 0);
-    }
-
-    public void payout(Rider rider, int severity) {
-        Payout payout = new Payout(rider, severity);
+    public void getPayout(int severity) {
+        Payout payout = new Payout(policy, severity);
+        payout.completePayout();
     }
 }

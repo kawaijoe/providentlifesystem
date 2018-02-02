@@ -1,27 +1,34 @@
 package aooad.assignment.providentlifesystem.policy.state;
 
+import aooad.assignment.providentlifesystem.policy.Policy;
 import aooad.assignment.providentlifesystem.policy.decorator.Rider;
-import aooad.assignment.providentlifesystem.policy.insurance.Policy;
+import aooad.assignment.providentlifesystem.policy.decorator.BasePolicy;
 
 public class Lapsed extends State {
 
-    public Lapsed() {
-        super();
+    private String errorMessage = "State have been Lapsed!";
+
+    public Lapsed(Policy policy) {
+        super(policy);
     }
 
-    public Lapsed(String information) {
-        super(information);
+    public Lapsed(Policy policy, String errorMessage) {
+        super(policy);
+        this.errorMessage = errorMessage;
     }
 
-    public void makePayment(Policy policy) {
-        policy.getPremium().makePayment();
+    @Override
+    public void makePayment() {
+        policy.getPremium().creditCardPayment();
     }
 
-    public void payout(Rider rider) {
-        System.out.println("Policy have been lapsed.");
+    @Override
+    public void getPayout() {
+        System.out.println(errorMessage);
     }
 
-    public void payout(Rider rider, int severity) {
-        System.out.println("Policy have been lapsed.");
+    @Override
+    public void getPayout(int severity) {
+        System.out.println(errorMessage);
     }
 }
