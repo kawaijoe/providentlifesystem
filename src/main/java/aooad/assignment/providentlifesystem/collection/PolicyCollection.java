@@ -3,7 +3,6 @@ package aooad.assignment.providentlifesystem.collection;
 import aooad.assignment.providentlifesystem.policy.Policy;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class PolicyCollection {
@@ -14,8 +13,12 @@ public class PolicyCollection {
         policyList.add(policy);
     }
 
-    public List<Policy> getPolicyList() {
-        return policyList;
+    public Policy get(int index) {
+        return policyList.get(index);
+    }
+
+    public int size() {
+        return policyList.size();
     }
 
     public PolicyIterator getActiveIterator() {

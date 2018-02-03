@@ -2,18 +2,12 @@ package aooad.assignment.providentlifesystem.policy.state;
 
 import aooad.assignment.providentlifesystem.policy.Policy;
 
-public abstract class State {
+public interface State {
 
-    protected Policy policy;
+    void makePayment(Policy policy);
 
-    State(Policy policy) {
-        this.policy = policy;
-    }
+    void getPayout(Policy policy);
 
-    public abstract void makePayment();
-
-    public abstract void getPayout();
-
-    public abstract void getPayout(int severity);
+    void getPayout(Policy policy, int severity);
 
 }

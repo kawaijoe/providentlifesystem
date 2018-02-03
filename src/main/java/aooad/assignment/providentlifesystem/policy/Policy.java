@@ -2,34 +2,44 @@ package aooad.assignment.providentlifesystem.policy;
 
 import aooad.assignment.providentlifesystem.policy.decorator.PolicyDecorator;
 import aooad.assignment.providentlifesystem.policy.decorator.Rider;
+import aooad.assignment.providentlifesystem.policy.premium.OneTimePremium;
 import aooad.assignment.providentlifesystem.policy.premium.Premium;
-import aooad.assignment.providentlifesystem.policy.premium.PremiumType;
 import aooad.assignment.providentlifesystem.policy.state.Active;
 import aooad.assignment.providentlifesystem.policy.state.State;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class Policy implements Rider {
 
     private static int lastPolicyNumber = 1;
-    private int policyNumber;
+    private int policyNumber = lastPolicyNumber++;
     private String termsCondition;
 
     private Premium premium;
-    private State state;
+    private State state = Active.getInstance();
     private PolicyDecorator policyDecorator;
+    private Calendar maturityDate;
 
-    public Policy(PremiumType premiumType, String termsCondition, PolicyDecorator policyDecorator) {
-        policyNumber = lastPolicyNumber++;
+    public Policy(PolicyDecorator policyDecorator, String termsCondition) {
         this.termsCondition = termsCondition;
-        premium = new Premium(premiumType, this);
-        state = new Active(this);
         this.policyDecorator = policyDecorator;
+        premium = new OneTimePremium(this);
+    }
+
+    public Policy(PolicyDecorator policyDecorator, String termsCondition, int paymentInterval) {
+        this.termsCondition = termsCondition;
+        this.policyDecorator = policyDecorator;
+        premium = new Premium(this, paymentInterval);
     }
 
     public void addRider(PolicyDecorator policyDecorator) {
         policyDecorator.setRider(this.policyDecorator);
         this.policyDecorator = policyDecorator;
+    }
+
+    public PolicyDecorator getPolicyDecorator() {
+        return policyDecorator;
     }
 
     public double calculateCost() {
@@ -60,11 +70,19 @@ public class Policy implements Rider {
         return termsCondition;
     }
 
-    public Premium getPremium() {
-        return premium;
+    public void setMaturityDate(Calendar maturityDate) {
+        if(maturityDate != null) {
+            this.maturityDate = maturityDate;
+        } else {
+            System.out.println("Cannot change maturity date once set!");
+        }
     }
 
-    public Rider getPolicyDecorator() {
-        return policyDecorator;
+    public Calendar getMaturityDate() {
+        return maturityDate;
+    }
+
+    public Premium getPremium() {
+        return premium;
     }
 }

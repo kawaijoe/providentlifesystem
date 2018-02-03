@@ -1,18 +1,14 @@
 package aooad.assignment.providentlifesystem.collection;
 
 import aooad.assignment.providentlifesystem.policy.Policy;
-import aooad.assignment.providentlifesystem.policy.state.*;
 
 import java.util.Iterator;
-import java.util.List;
-
 
 public class PolicyIterator implements Iterator<Policy> {
 
-    private PolicyCollection policyCollection;
     private int position = 0;
-    private Policy policy;
     private Class stateToCheck;
+    private PolicyCollection policyCollection;
 
     PolicyIterator(PolicyCollection policyCollection, String stateToCheck) {
         this.policyCollection = policyCollection;
@@ -26,26 +22,29 @@ public class PolicyIterator implements Iterator<Policy> {
 
     @Override
     public boolean hasNext() {
-        List<Policy> policyList = policyCollection.getPolicyList();
+        int temptPosition = position;
+        int maxIndex = policyCollection.size() - 1;
 
-        while(position < policyList.size() && !(stateToCheck.isInstance(policyList.get(position).getState()))) {
-            position++;
-            System.out.println("Loop");
+        while (temptPosition < maxIndex && !stateMatch(temptPosition)) {
+            temptPosition++;
         }
 
-        System.out.println(position);
-        policy = policyList.get(position - 1);
-        return stateToCheck.isInstance(policy.getState());
+        return temptPosition <= maxIndex && stateMatch(temptPosition);
     }
 
     @Override
     public Policy next() {
-        return policy;
+        int maxIndex = policyCollection.size() - 1;
+
+        while(position < maxIndex && !stateMatch(position)) {
+            position++;
+        }
+
+        return policyCollection.get(position++);
     }
 
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
+    private boolean stateMatch(int position) {
+        return stateToCheck.isInstance(policyCollection.get(position).getState());
     }
 
 }

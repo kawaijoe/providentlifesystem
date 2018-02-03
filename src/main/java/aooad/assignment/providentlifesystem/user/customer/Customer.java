@@ -13,9 +13,6 @@ public class Customer extends User {
     }
 
     public void viewPolicies() {
-        for (Policy policy : policyCollection.getPolicyList()) {
-            policy.getPolicyNumber();
-        }
     }
 
 }

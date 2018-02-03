@@ -3,22 +3,27 @@ package aooad.assignment.providentlifesystem.policy.state;
 import aooad.assignment.providentlifesystem.policy.Payout;
 import aooad.assignment.providentlifesystem.policy.Policy;
 
-public class Active extends State {
+public class Active implements State {
 
-    public Active(Policy policy) {
-        super(policy);
+    private static State ourInstance = new Active();
+
+    public static State getInstance() {
+        return ourInstance;
     }
 
-    public void makePayment() {
+    @Override
+    public void makePayment(Policy policy) {
         policy.getPremium().creditCardPayment();
     }
 
-    public void getPayout() {
+    @Override
+    public void getPayout(Policy policy) {
         Payout payout = new Payout(policy);
         payout.completePayout();
     }
 
-    public void getPayout(int severity) {
+    @Override
+    public void getPayout(Policy policy, int severity) {
         Payout payout = new Payout(policy, severity);
         payout.completePayout();
     }

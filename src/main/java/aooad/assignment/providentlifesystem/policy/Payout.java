@@ -1,9 +1,9 @@
 package aooad.assignment.providentlifesystem.policy;
 
-import aooad.assignment.providentlifesystem.policy.decorator.Rider;
 import aooad.assignment.providentlifesystem.policy.state.Terminated;
 import aooad.assignment.providentlifesystem.system.CreditCardFacade;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class Payout {
@@ -34,8 +34,16 @@ public class Payout {
     }
 
     public void completePayout() {
-        CreditCardFacade.makePayment(getPayoutAmount());
-        if(severity == 0) policy.setState(new Terminated(policy));
+        if(policy.getMaturityDate() == null) {
+            CreditCardFacade.makePayment(getPayoutAmount());
+        } else {
+            if(policy.getMaturityDate().getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
+                CreditCardFacade.makePayment(getPayoutAmount());
+                policy.setState(Terminated.getInstance());
+            } else {
+                System.out.println("Cannot complete payout! Maturity date have not been reached.");
+            }
+        }
     }
 
 }
