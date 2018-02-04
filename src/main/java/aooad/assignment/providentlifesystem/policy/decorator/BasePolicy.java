@@ -1,5 +1,6 @@
 package aooad.assignment.providentlifesystem.policy.decorator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BasePolicy extends PolicyDecorator {
@@ -12,15 +13,20 @@ public class BasePolicy extends PolicyDecorator {
         super(name, price, payout);
     }
 
+    @Override
     public double calculateCost() {
         return price;
     }
 
+    @Override
     public double calculatePayout() {
         return payout;
     }
 
+    @Override
     public List<Rider> getPolicies() {
-        return null;
+        List<Rider> list = new ArrayList<>();
+        list.add(this);
+        return list;
     }
 }

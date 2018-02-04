@@ -1,5 +1,6 @@
 package aooad.assignment.providentlifesystem.user;
 
+import aooad.assignment.providentlifesystem.user.User;
 import aooad.assignment.providentlifesystem.user.administrator.Administrator;
 import aooad.assignment.providentlifesystem.user.agent.Agent;
 import aooad.assignment.providentlifesystem.user.customer.Customer;

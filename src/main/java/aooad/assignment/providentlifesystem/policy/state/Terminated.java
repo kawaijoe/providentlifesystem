@@ -13,7 +13,12 @@ public class Terminated implements State {
     private final String ERROR_MESSAGE = "State have been terminated!";
 
     @Override
-    public void makePayment(Policy policy) {
+    public void makeCreditPayment(Policy policy) {
+        System.out.println(ERROR_MESSAGE);
+    }
+
+    @Override
+    public void makeChequePayment(Policy policy) {
         System.out.println(ERROR_MESSAGE);
     }
 
@@ -24,6 +29,11 @@ public class Terminated implements State {
 
     @Override
     public void getPayout(Policy policy, int severity) {
+        System.out.println(ERROR_MESSAGE);
+    }
+
+    @Override
+    public void setLapse(Policy policy) {
         System.out.println(ERROR_MESSAGE);
     }
 }

@@ -13,8 +13,13 @@ public class Lapsed implements State {
     private final String ERROR_MESSAGE = "State have been Lapsed!";
 
     @Override
-    public void makePayment(Policy policy) {
+    public void makeCreditPayment(Policy policy) {
         policy.getPremium().creditCardPayment();
+    }
+
+    @Override
+    public void makeChequePayment(Policy policy) {
+        policy.getPremium().chequePayment();
     }
 
     @Override
@@ -25,5 +30,10 @@ public class Lapsed implements State {
     @Override
     public void getPayout(Policy policy, int severity) {
         System.out.println(ERROR_MESSAGE);
+    }
+
+    @Override
+    public void setLapse(Policy policy) {
+        policy.getPremium().setLapsed();
     }
 }
