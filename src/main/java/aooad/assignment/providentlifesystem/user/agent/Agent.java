@@ -6,11 +6,13 @@ import aooad.assignment.providentlifesystem.user.agent.salarystrategy.SalaryStra
 
 public class Agent extends User {
 
+    private static int last_id = 0;
+
     private SalaryStrategy salaryStrategy;
     private PolicyCollection policyCollection = new PolicyCollection();
 
-    public Agent(String name, int id, String password, SalaryStrategy salaryStrategy) {
-        super(name, id, password);
+    public Agent(String name, String password, SalaryStrategy salaryStrategy) {
+        super(name, last_id++, password);
         this.salaryStrategy = salaryStrategy;
     }
 

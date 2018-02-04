@@ -15,8 +15,11 @@ public class PolicyDecorator implements Rider {
         this.payout = payout;
     }
 
+    @Override
     public List<Rider> getPolicies() {
-        return rider.getPolicies();
+        List<Rider> list = rider.getPolicies();
+        list.add(this);
+        return list;
     }
 
     public Rider getRider() {
@@ -27,10 +30,12 @@ public class PolicyDecorator implements Rider {
         this.rider = rider;
     }
 
+    @Override
     public double calculateCost() {
         return rider.calculateCost() + price;
     }
 
+    @Override
     public double calculatePayout() {
         return rider.calculatePayout() + payout;
     }

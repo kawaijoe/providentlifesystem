@@ -4,10 +4,18 @@ import aooad.assignment.providentlifesystem.policy.Policy;
 
 public interface State {
 
-    void makePayment(Policy policy);
+    void makeCreditPayment(Policy policy);
+
+    void makeChequePayment(Policy policy);
 
     void getPayout(Policy policy);
 
     void getPayout(Policy policy, int severity);
+
+    void setLapse(Policy policy);
+
+    default void terminate(Policy policy) {
+        policy.setState(Terminated.getInstance());
+    }
 
 }

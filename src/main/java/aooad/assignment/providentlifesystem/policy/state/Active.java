@@ -12,8 +12,13 @@ public class Active implements State {
     }
 
     @Override
-    public void makePayment(Policy policy) {
+    public void makeCreditPayment(Policy policy) {
         policy.getPremium().creditCardPayment();
+    }
+
+    @Override
+    public void makeChequePayment(Policy policy) {
+        policy.getPremium().chequePayment();
     }
 
     @Override
@@ -26,5 +31,10 @@ public class Active implements State {
     public void getPayout(Policy policy, int severity) {
         Payout payout = new Payout(policy, severity);
         payout.completePayout();
+    }
+
+    @Override
+    public void setLapse(Policy policy) {
+        policy.getPremium().setLapsed();
     }
 }
