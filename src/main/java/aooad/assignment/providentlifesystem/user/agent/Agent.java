@@ -3,6 +3,7 @@ package aooad.assignment.providentlifesystem.user.agent;
 import aooad.assignment.providentlifesystem.collection.PolicyCollection;
 import aooad.assignment.providentlifesystem.policy.Policy;
 import aooad.assignment.providentlifesystem.policy.decorator.BasePolicy;
+import aooad.assignment.providentlifesystem.policy.decorator.rider.GenericRider;
 import aooad.assignment.providentlifesystem.system.EmailFacade;
 import aooad.assignment.providentlifesystem.system.PrinterFacade;
 import aooad.assignment.providentlifesystem.user.ConsoleHelper;
@@ -10,6 +11,7 @@ import aooad.assignment.providentlifesystem.user.Customer;
 import aooad.assignment.providentlifesystem.user.User;
 import aooad.assignment.providentlifesystem.user.agent.salarystrategy.SalaryStrategy;
 
+import java.io.Console;
 import java.util.*;
 
 public class Agent extends User {
@@ -58,40 +60,127 @@ public class Agent extends User {
                     createInsurancePolicy();
                     break;
                 case 2:
+                    viewPolicies();
                     break;
             }
         }
     }
 
-    public void overdueAlert() {
-        ConsoleHelper.printSegment("Overdue Alert");
-        List<Policy> outstandingList = new ArrayList<>();
-        for(int i = 0; i < policyCollection.size(); i++) {
-            Policy policy = policyCollection.get(i);
-            if(policy.getPremium().isOutstanding()) {
-                outstandingList.add(policy);
+    private void viewPolicies() {
+        ConsoleHelper.displayList("Policies", ConsoleHelper.viewPoliciesBuilder(policyCollection));
+        int option = ConsoleHelper.question("Select an option",
+                List.of("Generate Payment Due Alert",
+                        "Edit Policy"));
+        switch(option) {
+            case 1:
+                generateOverdueAlert();
+                break;
+            case 2:
+                editPolicy();
+                break;
+        }
+    }
+
+    private void editPolicy() {
+        int option = -1;
+
+        while(option != 0) {
+            option = ConsoleHelper.question("Choose an option",
+                    List.of("Add Rider",
+                            "Pay Premium by Cheque"));
+
+            switch(option) {
+                case 1:
+                    addRider();
+                    break;
+                case 2:
+                    payPremiumByCheque();
+                    break;
+            }
+        }
+    }
+
+    private void addRider() {
+        int option = ConsoleHelper.question("View Policies (Enter Policy ID to Add Rider)",
+                ConsoleHelper.viewPoliciesBuilder(policyCollection));
+        Policy policy = policyCollection.get(option - 1);
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter Rider Name: ");
+        String name = scanner.nextLine();
+
+        double price;
+        while(true) {
+            System.out.print("Enter Price: ");
+            try {
+                price = Double.parseDouble(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[ERROR] Please enter a number.");
             }
         }
 
-        for(int i = 0; i < outstandingList.size(); i++) {
-            int option = -1;
-            while(option != 0) {
-                option = ConsoleHelper.question("How would you like to send your alert? (Exit will skip the policy)",
-                        List.of("Send Email",
-                                "Print Letter"));
+        double payout;
+        while(true) {
+            System.out.print("Enter Payout: ");
+            try {
+                payout = Double.parseDouble(scanner.nextLine());
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[ERROR] Please enter a number.");
+            }
+        }
 
-                switch(option) {
-                    case 1:
-                        EmailFacade.send(outstandingList.get(i));
-                        break;
-                    case 2:
-                        PrinterFacade.print(outstandingList.get(i));
-                        break;
-                }
+        policy.addRider(new GenericRider(name, price, payout));
+    }
+
+    private void payPremiumByCheque() {
+        int option = ConsoleHelper.question("View Policies (Enter PolicyID to pay for premium)",
+                ConsoleHelper.viewPoliciesBuilder(policyCollection));
+        Policy policy = policyCollection.get(option - 1);
+        policy.getPremium().chequePayment();
+    }
+
+    private void generateOverdueAlert() {
+        List<Policy> policyList = new ArrayList<>();
+        List<String> stringList = new ArrayList<>();
+
+        for(int i = 0; i < policyCollection.size(); i++) {
+            Policy policy = policyCollection.get(i);
+            if(policy.getPremium().isOutstanding()) {
+                policyList.add(policy);
+                stringList.add(policy.toString());
+            }
+        }
+
+        Policy policy = policyList.get(ConsoleHelper.question("Select a Policy to Generate Alert", stringList) - 1);
+
+        int option = ConsoleHelper.question("How would you like to send your alert?",
+                List.of("Send Email",
+                        "Print Letter"));
+
+        switch(option) {
+            case 1:
+                EmailFacade.send(policy);
+                break;
+            case 2:
+                PrinterFacade.print(policy);
+                break;
+        }
+    }
+
+    public void overdueAlert() {
+        ConsoleHelper.printSegment("Overdue Alert");
+        List<String> outstandingList = new ArrayList<>();
+        for(int i = 0; i < policyCollection.size(); i++) {
+            Policy policy = policyCollection.get(i);
+            if(policy.getPremium().isOutstanding()) {
+                outstandingList.add(policy.toString());
             }
         }
 
         if(outstandingList.size() == 0) System.out.println("Great News! No policies are overdue.");
+        else ConsoleHelper.displayList("Outstanding Policies", outstandingList);
     }
 
     private void createInsurancePolicy() {
@@ -132,14 +221,13 @@ public class Agent extends User {
     }
 
     public static int selectAgent() {
-        int option = -1;
         List<String> list = new ArrayList<>();
 
         for(int i = 0; i < agentMap.size(); i++) {
             list.add(agentMap.get(i).getName());
         }
 
-        option = ConsoleHelper.question("Select Agent", list);
+        int option = ConsoleHelper.question("Select Agent", list);
         if(option != 0) return option - 1;
         return -1;
     }

@@ -44,23 +44,10 @@ public class Customer extends User {
 
     private void viewPolicies() {
         int option = -1;
-
         while(option != 0) {
-            List<String> options = new ArrayList<>();
-
-            for(int i = 0; i < policyCollection.size(); i++) {
-                Policy policy = policyCollection.get(i);
-                List<Rider> riderList = policy.getPolicies();
-                StringBuilder sb = new StringBuilder();
-
-                sb.append(policy.getPremium().isOutstanding() ? "<Outstanding>\n" : "\n");
-                sb.append(riderList.get(0).toString());
-
-                options.add(sb.toString());
-            }
-
-            option = ConsoleHelper.question("View Policies (Enter PolicyID to pay for premium)", options);
-            payPolicy(policyCollection.get(option - 1));
+            option = ConsoleHelper.question("View Policies (Enter PolicyID to pay for premium)",
+                    ConsoleHelper.viewPoliciesBuilder(policyCollection));
+            if(option != 0) payPolicy(policyCollection.get(option - 1));
         }
     }
 
@@ -71,14 +58,13 @@ public class Customer extends User {
     }
 
     public static int selectCustomer() {
-        int option = -1;
         List<String> list = new ArrayList<>();
 
         for(int i = 0; i < customerMap.size(); i++) {
             list.add(customerMap.get(i).getName());
         }
 
-        option = ConsoleHelper.question("Select Customer", list);
+        int option = ConsoleHelper.question("Select Customer", list);
         if(option != 0) return option - 1;
         return -1;
     }

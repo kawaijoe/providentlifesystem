@@ -49,7 +49,7 @@ public class Policy {
         return rider.calculatePayout();
     }
 
-    public List<Rider> getPolicies() {
+    private List<Rider> getPolicies() {
         return rider.getPolicies();
     }
 
@@ -88,10 +88,11 @@ public class Policy {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for(Rider rider : getPolicies()) {
-            sb.append(" - ");
-            sb.append(rider.getName());
-            sb.append("\n");
+        List<Rider> riderList = getPolicies();
+        sb.append(riderList.get(0).getName());
+        for(int i = 1; i < riderList.size(); i++) {
+            sb.append("\n - ");
+            sb.append(riderList.get(i).getName());
         }
         return sb.toString();
     }
