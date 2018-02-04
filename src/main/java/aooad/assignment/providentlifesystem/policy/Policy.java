@@ -1,6 +1,5 @@
 package aooad.assignment.providentlifesystem.policy;
 
-import aooad.assignment.providentlifesystem.policy.decorator.PolicyDecorator;
 import aooad.assignment.providentlifesystem.policy.decorator.Rider;
 import aooad.assignment.providentlifesystem.policy.premium.OneTimePremium;
 import aooad.assignment.providentlifesystem.policy.premium.Premium;
@@ -10,7 +9,7 @@ import aooad.assignment.providentlifesystem.policy.state.State;
 import java.util.Calendar;
 import java.util.List;
 
-public class Policy implements Rider {
+public class Policy {
 
     private static int lastPolicyNumber = 1;
     private int policyNumber = lastPolicyNumber++;
@@ -18,40 +17,40 @@ public class Policy implements Rider {
 
     private Premium premium;
     private State state = Active.getInstance();
-    private PolicyDecorator policyDecorator;
+    private Rider rider;
     private Calendar maturityDate;
 
-    public Policy(PolicyDecorator policyDecorator, String termsCondition) {
+    public Policy(Rider rider, String termsCondition) {
         this.termsCondition = termsCondition;
-        this.policyDecorator = policyDecorator;
+        this.rider = rider;
         premium = new OneTimePremium(this);
     }
 
-    public Policy(PolicyDecorator policyDecorator, String termsCondition, int paymentInterval) {
+    public Policy(Rider rider, String termsCondition, int paymentInterval) {
         this.termsCondition = termsCondition;
-        this.policyDecorator = policyDecorator;
+        this.rider = rider;
         premium = new Premium(this, paymentInterval);
     }
 
-    public void addRider(PolicyDecorator policyDecorator) {
-        policyDecorator.setRider(this.policyDecorator);
-        this.policyDecorator = policyDecorator;
+    public void addRider(Rider rider) {
+        rider.setRider(this.rider);
+        this.rider = rider;
     }
 
-    public PolicyDecorator getPolicyDecorator() {
-        return policyDecorator;
+    public Rider getRider() {
+        return rider;
     }
 
     public double calculateCost() {
-        return policyDecorator.calculateCost();
+        return rider.calculateCost();
     }
 
     public double calculatePayout() {
-        return policyDecorator.calculatePayout();
+        return rider.calculatePayout();
     }
 
     public List<Rider> getPolicies() {
-        return null;
+        return rider.getPolicies();
     }
 
     public State getState() {
@@ -84,5 +83,16 @@ public class Policy implements Rider {
 
     public Premium getPremium() {
         return premium;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for(Rider rider : getPolicies()) {
+            sb.append(" - ");
+            sb.append(rider.getName());
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 }

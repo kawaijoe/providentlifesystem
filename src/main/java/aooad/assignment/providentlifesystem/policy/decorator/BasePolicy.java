@@ -3,7 +3,7 @@ package aooad.assignment.providentlifesystem.policy.decorator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BasePolicy extends PolicyDecorator {
+public class BasePolicy extends Rider {
 
     public BasePolicy(String name, double price) {
         super(name, price, 0);

@@ -27,8 +27,14 @@ public class Premium {
         }
     }
 
-    public void creditCardPayment() {
-        CreditCardFacade.retrievePayment(policy.calculateCost());
+    public void creditCardPayment(String creditCardNumber) {
+        CreditCardFacade.retrievePayment(policy.calculateCost(), creditCardNumber);
+        policy.setState(Active.getInstance());
+        lastPaid = Calendar.getInstance();
+    }
+
+    public void creditCardPayment(String creditCardNumber, int interest) {
+        CreditCardFacade.retrievePayment(policy.calculateCost() * (((float) interest/100.0) + 1.0), creditCardNumber);
         policy.setState(Active.getInstance());
         lastPaid = Calendar.getInstance();
     }
@@ -43,8 +49,7 @@ public class Premium {
         return (int) diff / (24 * 60 * 60 * 1000);
     }
 
-    public boolean isOutstanding()
-    {
+    public boolean isOutstanding() {
         return dateDifferent() > paymentInterval;
     }
 }

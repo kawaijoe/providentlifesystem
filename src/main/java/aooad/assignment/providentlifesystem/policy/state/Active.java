@@ -12,8 +12,8 @@ public class Active implements State {
     }
 
     @Override
-    public void makeCreditPayment(Policy policy) {
-        policy.getPremium().creditCardPayment();
+    public void makeCreditPayment(Policy policy, String creditCardNumber) {
+        policy.getPremium().creditCardPayment(creditCardNumber);
     }
 
     @Override
@@ -22,15 +22,15 @@ public class Active implements State {
     }
 
     @Override
-    public void getPayout(Policy policy) {
+    public void getPayout(Policy policy, String creditCardNumber) {
         Payout payout = new Payout(policy);
-        payout.completePayout();
+        payout.completePayout(creditCardNumber);
     }
 
     @Override
-    public void getPayout(Policy policy, int severity) {
+    public void getPayout(Policy policy, String creditCardNumber, int severity) {
         Payout payout = new Payout(policy, severity);
-        payout.completePayout();
+        payout.completePayout(creditCardNumber);
     }
 
     @Override

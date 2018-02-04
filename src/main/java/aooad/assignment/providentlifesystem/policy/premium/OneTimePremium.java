@@ -16,7 +16,7 @@ public class OneTimePremium extends Premium {
     }
 
     @Override
-    public void creditCardPayment() {
+    public void creditCardPayment(String creditCardNumber) {
         System.out.println(ERROR_MESSAGE);
     }
 

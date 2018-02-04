@@ -4,13 +4,13 @@ import aooad.assignment.providentlifesystem.policy.Policy;
 
 public interface State {
 
-    void makeCreditPayment(Policy policy);
+    void makeCreditPayment(Policy policy, String creditCardNumber);
 
     void makeChequePayment(Policy policy);
 
-    void getPayout(Policy policy);
+    void getPayout(Policy policy, String creditCardNumber);
 
-    void getPayout(Policy policy, int severity);
+    void getPayout(Policy policy, String creditCardNumber, int severity);
 
     void setLapse(Policy policy);
 

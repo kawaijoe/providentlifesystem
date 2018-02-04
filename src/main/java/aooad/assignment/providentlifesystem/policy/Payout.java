@@ -29,16 +29,16 @@ public class Payout {
         this.severity = severity;
     }
 
-    public double getPayoutAmount() {
+    private double getPayoutAmount() {
         return policy.calculatePayout() + severityMap.get(severity);
     }
 
-    public void completePayout() {
+    public void completePayout(String creditCardNumber) {
         if(policy.getMaturityDate() == null) {
-            CreditCardFacade.makePayment(getPayoutAmount());
+            CreditCardFacade.makePayment(getPayoutAmount(), creditCardNumber);
         } else {
             if(policy.getMaturityDate().getTimeInMillis() < Calendar.getInstance().getTimeInMillis()) {
-                CreditCardFacade.makePayment(getPayoutAmount());
+                CreditCardFacade.makePayment(getPayoutAmount(), creditCardNumber);
                 policy.setState(Terminated.getInstance());
             } else {
                 System.out.println("Cannot complete payout! Maturity date have not been reached.");
