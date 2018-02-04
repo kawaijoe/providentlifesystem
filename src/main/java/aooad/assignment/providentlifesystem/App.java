@@ -65,6 +65,7 @@ public class App {
 
         System.out.println(Terminated.getInstance().getClass().getSimpleName());
 
+
         PolicyIterator policyIterator = policyCollection.getTerminatedIterator();
 
         while(policyIterator.hasNext()) {
