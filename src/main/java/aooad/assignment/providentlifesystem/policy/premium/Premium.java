@@ -42,4 +42,9 @@ public class Premium {
         long diff = Calendar.getInstance().getTimeInMillis() - lastPaid.getTimeInMillis();
         return (int) diff / (24 * 60 * 60 * 1000);
     }
+
+    public boolean isOutstanding()
+    {
+        return dateDifferent() > paymentInterval;
+    }
 }

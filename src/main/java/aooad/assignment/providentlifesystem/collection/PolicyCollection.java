@@ -22,14 +22,17 @@ public class PolicyCollection {
     }
 
     public PolicyIterator getActiveIterator() {
+
         return new PolicyIterator(this, "Active");
     }
 
     public PolicyIterator getLapsedIterator() {
+
         return new PolicyIterator(this, "Lapsed");
     }
 
     public PolicyIterator getTerminatedIterator() {
+
         return new PolicyIterator(this, "Terminated");
     }
 

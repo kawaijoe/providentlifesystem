@@ -14,8 +14,17 @@ public class App {
 
     static List<User> userList = new ArrayList<>();
 
-    static String abc = "====================\n" +
-            "   Menu\n";
+    static String joestring = "====================\n" +
+            "   Menu\n" ;
+
+    static String yutingstring1 = "===========================================================================\n" +
+            "                                                           AOOAD Assignment 2018\n" +
+            "-------------------------------------------------------------Menu---------------------------------------------------------------\n" +
+            "1. Login as Agent\n" +
+            "2. Login as Customer\n" +
+            "-----------------------------------------------------------------------------------------------------------------------------------\n" +
+            "Enter your option :";
+
 
     public static void main(String[] args) {
 
@@ -34,5 +43,9 @@ public class App {
         while(policyIterator.hasNext()) {
             System.out.println(policyIterator.next().getState().getClass());
         }
+
+        System.out.println(yutingstring1);
+
+
     }
 }
